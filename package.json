@@ -1,6 +1,6 @@
 {
-    "name": "stable-diffusion-puppeteer",
-    "version": "0.0.0",
+    "name": "sd-webui-puppeteer",
+    "version": "0.1.0",
     "description": "",
     "scripts": {
         "start": "ts-node src/index.ts",
