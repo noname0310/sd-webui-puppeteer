@@ -48,7 +48,7 @@ export class Server {
             {
                 cert: fs.readFileSync(path.join(__dirname, "..", "ssl", "cert.pem")),
                 key: fs.readFileSync(path.join(__dirname, "..", "ssl", "privkey.pem")),
-                ca: fs.readFileSync(path.join(__dirname, "..", "ssl", "chain.pem"))
+                ca: fs.readFileSync(path.join(__dirname, "..", "ssl", "fullchain.pem")),
             }, 
             app
         ).listen(port, () => {
