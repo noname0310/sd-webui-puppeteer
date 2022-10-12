@@ -6,7 +6,7 @@
         "start": "ts-node src/index.ts",
         "lint": "eslint --ext .ts,.tsx src --fix"
     },
-    "author": "",
+    "author": "noname0310",
     "license": "MIT",
     "devDependencies": {
         "@types/ws": "^8.5.3",
