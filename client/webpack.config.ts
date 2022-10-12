@@ -66,8 +66,8 @@ export default {
         new HtmlWebpackPlugin({
             template: "./src/index.html"
         }),
-        (process.env.NODE_ENV === "production") ? new HtmlInlineScriptPlugin() : null,
-        (process.env.NODE_ENV === "production") ? new HtmlInlineCSSWebpackPlugin() : null,
+        new HtmlInlineScriptPlugin(),
+        new HtmlInlineCSSWebpackPlugin(),
         new ESLintPlugin({
             extensions: ["ts", "tsx", "js", "jsx"]
         }),

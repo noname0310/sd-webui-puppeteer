@@ -1,5 +1,8 @@
 import express from "express";
+import fs from "fs";
 import type http from "http";
+import https from "https";
+import path from "path";
 import WebSocket, { WebSocketServer } from "ws";
 
 import type { Packet } from "./Packet";
@@ -13,12 +16,12 @@ class Client {
         this.webSocket.on("pong", this.onPong);
     }
 
-    public ping() {
+    public ping(): void {
         this._isAlive = false;
         (this.webSocket as WebSocket).ping();
     }
     
-    private readonly onPong = () => {
+    private readonly onPong = (): void => {
         this._isAlive = true;
     };
 
@@ -41,7 +44,14 @@ export class Server {
             res.send("server is running");
         });
         
-        this._httpServer = app.listen(port, () => {
+        this._httpServer = https.createServer(
+            {
+                cert: fs.readFileSync(path.join(__dirname, "..", "ssl", "cert.pem")),
+                key: fs.readFileSync(path.join(__dirname, "..", "ssl", "privkey.pem")),
+                ca: fs.readFileSync(path.join(__dirname, "..", "ssl", "chain.pem"))
+            }, 
+            app
+        ).listen(port, () => {
             console.log(`server is listening on port ${port}`);
         }).on("error", (err) => {
             console.error(err);

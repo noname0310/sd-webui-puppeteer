@@ -5,11 +5,11 @@ import { DebounceExecuter } from "./DebounceExecuter";
 import { PacketKind } from "./Packet";
 
 async function main(): Promise<void> {
+    const client = await Client.createAndConnect("wss://nonamehome.iptime.org:20310");
+
     const resultImageElement = document.getElementById("result-img") as HTMLImageElement;
     const textInputElement = document.getElementById("text-input") as HTMLInputElement;
     const generateButtonElement = document.getElementById("generate-button") as HTMLButtonElement;
-
-    const client = await Client.createAndConnect("ws://nonamehome.iptime.org:20310");
 
     client.onPacket = (packet): void => {
         switch (packet.kind) {
