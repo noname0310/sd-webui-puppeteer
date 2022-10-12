@@ -110,6 +110,8 @@ export class WebUIController {
         return false;
     }
 
+    lastImage: string|null = null;
+
     public async flushImages(): Promise<string[]|null> {
         if (!this._processing) return null;
 
@@ -119,9 +121,13 @@ export class WebUIController {
         const images = await gallery.$$("img");
         if (images.length === 0) return null;
 
+        if (await images[0].evaluate(element => element.src) === this.lastImage) return null;
+
         const base64ImageUrls = await Promise.all(images.map(async image => {
             return await image.evaluate(image => image.src);
         }));
+
+        this.lastImage = base64ImageUrls[0];
 
         this._processing = false;
         return base64ImageUrls;
