@@ -16,7 +16,7 @@ export class WebUIController {
 
     public static async create(): Promise<WebUIController> {
         const browser = await puppeteer.launch({
-            headless: false,
+            headless: true,
             defaultViewport: null
         });
         const page = (await browser.pages())[0];
