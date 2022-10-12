@@ -76,6 +76,10 @@ async function main(): Promise<void> {
                 result: images
             };
             server.broadcast(lastResult);
+            server.broadcast({
+                kind: PacketKind.GetIsGeneratingResult,
+                result: false
+            });
         }
     }
 }

@@ -9,7 +9,7 @@ async function main(): Promise<void> {
     const textInputElement = document.getElementById("text-input") as HTMLInputElement;
     const generateButtonElement = document.getElementById("generate-button") as HTMLButtonElement;
 
-    const client = await Client.createAndConnect("ws://127.0.0.1:20310");
+    const client = await Client.createAndConnect("ws://nonamehome.iptime.org:20310");
 
     client.onPacket = (packet): void => {
         switch (packet.kind) {

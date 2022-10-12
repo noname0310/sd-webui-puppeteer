@@ -1,7 +1,7 @@
 import path from "path";
 import HtmlWebpackPlugin from "html-webpack-plugin";
-// import HtmlInlineScriptPlugin from "html-inline-script-webpack-plugin";
-// import HtmlInlineCSSWebpackPlugin from "html-inline-css-webpack-plugin";
+import HtmlInlineScriptPlugin from "html-inline-script-webpack-plugin";
+import HtmlInlineCSSWebpackPlugin from "html-inline-css-webpack-plugin";
 import ESLintPlugin from "eslint-webpack-plugin";
 //import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
 
@@ -66,13 +66,13 @@ export default {
         new HtmlWebpackPlugin({
             template: "./src/index.html"
         }),
-        // new HtmlInlineScriptPlugin(),
-        // new HtmlInlineCSSWebpackPlugin(),
+        (process.env.NODE_ENV === "production") ? new HtmlInlineScriptPlugin() : null,
+        (process.env.NODE_ENV === "production") ? new HtmlInlineCSSWebpackPlugin() : null,
         new ESLintPlugin({
             extensions: ["ts", "tsx", "js", "jsx"]
         }),
         //new BundleAnalyzerPlugin()
-    ],
+    ].filter(Boolean),
     devServer: {
         host: "0.0.0.0",
         allowedHosts: "all",
