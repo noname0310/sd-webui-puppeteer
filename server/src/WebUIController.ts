@@ -51,6 +51,8 @@ export class WebUIController {
         promptText = !promptText.includes("masterpiece")
             ? "masterpiece, " + promptText
             : promptText;
+
+        promptText = promptText.replace("nsfw", "miku");
         
         const negativePromptTexts = [
             "nsfw",
