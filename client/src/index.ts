@@ -5,7 +5,7 @@ import { DebounceExecuter } from "./DebounceExecuter";
 import { PacketKind } from "./Packet";
 
 async function main(): Promise<void> {
-    const client = await Client.createAndConnect("wss://nonamehome.iptime.org:20310");
+    const client = await Client.createAndConnect("wss://the-world.space:20310");
 
     const resultImageElement = document.getElementById("result-img") as HTMLImageElement;
     const textInputElement = document.getElementById("text-input") as HTMLInputElement;
