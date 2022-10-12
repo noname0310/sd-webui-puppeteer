@@ -34,6 +34,12 @@ async function main(): Promise<void> {
         }
         case PacketKind.TrySetPrompt: {
             prompt = packet.promptText;
+            
+            //restrict to 70 chars
+            if (prompt.length > 70) {
+                prompt = prompt.substring(0, 70);
+            }
+
             server.broadcast({
                 kind: PacketKind.GetPromptResult,
                 result: prompt
