@@ -4,9 +4,21 @@ export class Client {
     private readonly _socket: WebSocket;
     public onPacket: (packet: Packet) => void = () => {/* */};
 
-    public constructor(url: string) {
+    private constructor(url: string, onConnected?: () => void) {
         this._socket = new WebSocket(url);
         this._socket.onmessage = this.onMessage;
+
+        if (onConnected !== undefined) {
+            this._socket.onopen = onConnected;
+        }
+    }
+
+    public static async createAndConnect(url: string): Promise<Client> {
+        return new Promise<Client>((resolve, _reject) => {
+            const client = new Client(url, () => {
+                resolve(client);
+            });
+        });
     }
 
     private readonly onMessage = (event: MessageEvent): void => {

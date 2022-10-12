@@ -1,11 +1,16 @@
 import puppeteer from "puppeteer";
 
 export class WebUIController {
-    private _shadowRoot: puppeteer.ElementHandle<ShadowRoot>;
-    private _generateBlock: boolean = false;
+    private readonly _browser: puppeteer.Browser;
+    private readonly _shadowRoot: puppeteer.ElementHandle<ShadowRoot>;
+    private _generateBlock = false;
     private _processing = false;
 
-    private constructor(shadowRoot: puppeteer.ElementHandle<ShadowRoot>) {
+    private constructor(
+        browser: puppeteer.Browser,
+        shadowRoot: puppeteer.ElementHandle<ShadowRoot>
+    ) {
+        this._browser = browser;
         this._shadowRoot = shadowRoot;
     }
 
@@ -20,7 +25,14 @@ export class WebUIController {
         const shadowRoot = await page.evaluateHandle(() => document.querySelector("body > gradio-app")?.shadowRoot ?? null);
         if (shadowRoot.jsonValue() === null) throw new Error("Failed to get shadowRoot");
 
-        return new WebUIController(shadowRoot as puppeteer.ElementHandle<ShadowRoot>);
+        return new WebUIController(
+            browser,
+            shadowRoot as puppeteer.ElementHandle<ShadowRoot>
+        );
+    }
+
+    public dispose(): void {
+        this._browser.close();
     }
 
     public async isGenerating(): Promise<boolean> {
@@ -36,7 +48,7 @@ export class WebUIController {
         if (this._generateBlock) return false;
         this._generateBlock = true;
 
-        promptText = promptText.indexOf("masterpiece") === -1
+        promptText = !promptText.includes("masterpiece")
             ? "masterpiece, " + promptText
             : promptText;
         
@@ -73,7 +85,7 @@ export class WebUIController {
         }
         await promptDiv.$eval("textarea", (element, value) => {
             element.value = value;
-            element.dispatchEvent(new Event('input', {bubbles:true}));
+            element.dispatchEvent(new Event("input", {bubbles:true}));
         }, promptText);
         const negPromptDiv = await this._shadowRoot.$("#negative_prompt");
         if (negPromptDiv === null) {
@@ -82,7 +94,7 @@ export class WebUIController {
         }
         await negPromptDiv.$eval("textarea", (element, value) => {
             element.value = value;
-            element.dispatchEvent(new Event('input', {bubbles:true}));
+            element.dispatchEvent(new Event("input", {bubbles:true}));
         }, negativePromptTexts);
 
         const generateButton = await this._shadowRoot.$("#txt2img_generate");
